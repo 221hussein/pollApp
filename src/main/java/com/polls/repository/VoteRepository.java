@@ -12,27 +12,27 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface VoteRepository extends JpaRepository<Vote,Long> {
 
-    @Query("select new com.polls.model.ChoiceVoteCount(v.choice.id, count (v.id)) from Vote  v where v.poll.id in : pollIds group by v.choice.id")
+    @Query("select new com.polls.model.ChoiceVoteCount(v.choice.id, count (v.id)) from Vote  v where v.poll.id in :pollIds group by v.choice.id")
     List<ChoiceVoteCount> countByPollIdInGroupByChoiceId(@Param("pollIds") List<Long> pollIds);
 
 
-    @Query("select new com.polls.model.ChoiceVoteCount(v.choice.id, count (v.id)) from Vote v where v.id =: pollId group by v.choice.id")
-    List<ChoiceVoteCount> countByPollIdGroupByChoiceId(@Param("pollId") Long pollId);
+    @Query("select new com.polls.model.ChoiceVoteCount(v.choice.id, count (v.id)) from Vote v where v.id =:pollId group by v.choice.id")
+    List<ChoiceVoteCount>countByPollIdGroupByChoiceId(@Param("pollId") Long pollId);
 
-    @Query("select v from Vote v where v.user.id =: userId and v.poll.id in :pollIds")
-    List<Vote> findByUserIdAndPollIdIn(@Param("UserId") Long userId,@Param("pollIds")List<Long> pollIds);
 
-    @Query("select v from Vote v where v.user.id = :userId and v.poll.id =: pollId")
-    Vote findByUserIdAndPollId(@Param("userId") Long userId, @Param("pollId") Long pollId);
+    @Query("SELECT v FROM Vote v where v.user.id = :userId and v.poll.id in :pollIds")
+    List<Vote> findByUserIdAndPollIdIn(@Param("userId") Long userId, @Param("pollIds") List<Long> pollIds);
+
+    @Query("select v from Vote v where v.user.id = :userId and v.poll.id = :pollIds")
+    Vote findByUserIdAndPollId(@Param("userId") Long userId, @Param("pollIds") Long pollIds);
 
     @Query("select COUNT (v.id) from Vote v where v.user.id =:userId")
     long countByUserId(@Param("userId") Long userId);
 
-    @Query("select v.poll.id from Vote v where v.id =: userId")
+    @Query("select v.poll.id from Vote v where v.id =:userId")
     Page<Long> findVotedPollIdsByUserId(@Param("userId") Long userId, Pageable pageable);
 }

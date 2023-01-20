@@ -49,7 +49,7 @@ public class AuthController {
     JwtTokenProvider tokenProvider;
 
 
-    @PostMapping("/signin")
+    @PostMapping("/s")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
